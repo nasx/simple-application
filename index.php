@@ -1,4 +1,7 @@
 <?php
+	if(isset($_GET['hostname']))
+		die(`hostname`);
+
     /*
     Ensure the following variables are defined in /var/www or outside the document root.
 
@@ -12,13 +15,13 @@
 
     function m_error($link)
     {
-        echo "Error, count not insert record!";
+        echo "Error, count not perform query!<br />";
         echo "Error Message: " . mysqli_error($link);
     }
 
-    $link = mysqli_connect($database_hostname, $database_username, $database_password, $database);
+	$connection = mysqli_init();
 
-    if(!$link)
+    if(!mysqli_real_connect($connection, $database_hostname, $database_username, $database_password, $database, 3306, NULL, MYSQLI_CLIENT_SSL))
     {
         echo "Could not connect to database!<br />";
         echo "Error Number: " . mysqli_connect_errno() . "<br />";
@@ -29,21 +32,21 @@
 
     if(isset($_POST) && isset($_POST['message']))
     {
-        $message = mysqli_real_escape_string($link, $_POST['message']);
+        $message = mysqli_real_escape_string($connection, $_POST['message']);
         $query = "INSERT INTO `records` (`message`) VALUES('$message')";
 
-        if(!mysqli_query($link, $query))
+        if(!mysqli_query($connection, $query))
         {
-            m_error($link);
+            m_error($connection);
             exit;
         }
     }
 
     $query = "SELECT * FROM `records`";
 
-    if(!($result = mysqli_query($link, $query)))
+    if(!($result = mysqli_query($connection, $query)))
     {
-        m_error($link);
+        m_error($connection);
         exit;
     }
 ?>
