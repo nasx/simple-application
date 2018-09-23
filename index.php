@@ -74,5 +74,9 @@
         <input type="text" name="message" style="length: 300px" />
         <input type="submit" name="submit" value="Submit" />
     </form>
+
+	<div style="font-size: small; font-size: small; font-color: #DDD">
+		Served from <?php echo `hostname`; ?>.
+	</div>
 </body>
 </html>
